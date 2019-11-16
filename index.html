@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="author" content="Yao-Yuan Mao">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTML Cleaner</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"
+    integrity="sha256-l85OmPOjvil/SOvVt3HnSSjzF1TUMyT9eV0c2BzEGzU=" crossorigin="anonymous" />
+  <style>
+    body {
+      padding-top: 20px;
+      padding-bottom: 100px;
+      font-family: sans-serif;
+    }
+
+    #page {
+      margin: 0px auto;
+      max-width: 960px;
+    }
+
+    #content {
+      border: solid 2px;
+      height: 460px;
+      margin: 10px 0;
+      overflow: auto;
+      padding: 8px;
+      resize: both;
+    }
+
+    button {
+      margin-right: 10px;
+      padding: 15px 10px;
+    }
+
+    #hint {
+      color: forestgreen;
+      font-weight: bold;
+      display: none;
+    }
+
+    .footnote {
+      font-size: 80%;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="page">
+    <h1>HTML Cleaner</h1>
+    <p>Paste your formatted content in the box below.</p>
+    <div contenteditable="true" id="content"></div>
+    <button id="remove-white-space-pre">Remove white-space preservation</button>
+    <button id="remove-all-style">Remove all non-schematic formatting</button>
+    <span id="hint">Cleaned!</span>
+    <p>Once cleaned, re-select and copy the content above, and paste it to your destination.</p>
+    <p class="footnote"><a href="https://github.com/yymao/html-cleaner"><img style="vertical-align: middle;"
+          src="https://img.shields.io/github/license/yymao/html-cleaner"></a> &#9400; 2019
+      <a href="https://yymao.github.io/">Yao-Yuan Mao</a>
+    </p>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+  <script>
+    function hide_hint() {
+      $("#hint").finish().hide();
+    }
+    function show_hint() {
+      $("#hint").show(0).fadeOut(1000);
+    }
+
+    $("#remove-white-space-pre").click(function () {
+      hide_hint();
+      $("#content *").attr("style", function (index, attr) {
+        if (attr) return attr.replace(/\bwhite-space\s*:\s*pre(?:-wrap|-line)?;?/ig, "");
+      });
+      show_hint();
+    });
+
+    $("#remove-all-style").click(function () {
+      hide_hint();
+      $("#content *").removeAttr("style class id width height");
+      show_hint();
+    });
+  </script>
+
+</body>
+
+</html>
