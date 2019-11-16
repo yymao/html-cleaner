@@ -11,7 +11,7 @@
   <style>
     body {
       padding: 20px;
-      padding-bottom: 100px;
+      padding-bottom: 80px;
       font-family: sans-serif;
     }
 
@@ -21,23 +21,52 @@
     }
 
     #content {
-      border: solid 2px;
-      height: 450px;
+      border-width: 3px;
+      border-style: dashed;
+      height: 40vh;
       margin: 10px 0;
       overflow: auto;
-      padding: 8px;
+      padding: 6px 10px;
       resize: both;
     }
 
     button {
       margin: 5px 10px 5px 0;
-      padding: 14px 10px;
+      padding: 12px 10px;
     }
 
     #hint {
       color: forestgreen;
       font-weight: bold;
-      display: none;
+      opacity: 0%;
+    }
+
+    @keyframes flash-show {
+      from {
+        opacity: 100%;
+      }
+
+      to {
+        opacity: 0%;
+      }
+    }
+
+    @keyframes flash-green {
+      from {
+        border-color: forestgreen;
+      }
+
+      to {
+        border-color: #000;
+      }
+    }
+
+    #content.run {
+      animation: flash-green 1.5s ease-in;
+    }
+
+    #hint.run {
+      animation: flash-show 1.5s ease-in;
     }
 
     .footnote {
@@ -51,11 +80,14 @@
     <h1>HTML Cleaner</h1>
     <p>Copy and paste your formatted content in the box below.</p>
     <div contenteditable="true" id="content"></div>
-    <button id="remove-white-space-pre">Remove white-space preservation</button>
-    <button id="remove-all-style">Remove all non-schematic formatting</button>
+    <button id="remove-white-space-pre"
+      title="Sequences of white space and newline characters are collapsed. Preserve all other formatting. Useful when copying formatted Google Docs contents to email client.">Remove
+      white-space preservation</button>
+    <button id="remove-all-style" title="Remove all 'style' tags so that only schematic formatting remains.">Remove all
+      non-schematic formatting</button>
     <span id="hint">Cleaned!</span>
-    <p>Once cleaned, re-select and copy the content above, and paste it to your destination. After cleaning, if you
-      notice that additional formatting is needed, use your destination editor to do so.</p>
+    <p>Once it's cleaned, re-select and copy the content above, and paste it to your destination. If you
+      notice that additional formatting is needed after cleaning, use your destination editor to do so.</p>
     <p class="footnote">All operations are done locally on the client side. No data is transmitted to the server or a
       third party.</p>
     <p class="footnote"><a href="https://github.com/yymao/html-cleaner"><img style="vertical-align: middle;"
@@ -64,28 +96,36 @@
     </p>
   </div>
 
-  <script src="https://code.jquery.com/jquery-3.4.1.min.js"
-    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+    integrity="sha256-pasqAKBDmFT4eHoN2ndd6lN370kFiGUFyTiUHWhU7k8=" crossorigin="anonymous"></script>
   <script>
     function hide_hint() {
-      $("#hint").finish().hide();
+      $("#hint,#content").removeClass();
+      void document.getElementById("hint").offsetWidth;
+      void document.getElementById("content").offsetWidth;
     }
+
     function show_hint() {
-      $("#hint").show(0).fadeOut(1000);
+      $("#hint,#content").addClass("run");
     }
 
     $("#remove-white-space-pre").click(function () {
       hide_hint();
-      $("#content *").attr("style", function (index, attr) {
-        if (attr) return attr.replace(/\bwhite-space\s*:\s*pre(?:-wrap|-line)?;?/ig, "");
-      });
-      show_hint();
+      if ($("#content").html()) {
+        $("#content *").attr("style", function (index, attr) {
+          if (attr) return attr.replace(/\bwhite-space\s*:\s*pre(?:-wrap|-line)?;?/ig, "");
+        });
+        $("#content *").removeAttr("class")
+        show_hint();
+      }
     });
 
     $("#remove-all-style").click(function () {
       hide_hint();
-      $("#content *").removeAttr("style class id width height");
-      show_hint();
+      if ($("#content").html()) {
+        $("#content *").removeAttr("style class width height");
+        show_hint();
+      }
     });
   </script>
 
