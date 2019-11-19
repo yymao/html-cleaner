@@ -25,7 +25,8 @@ _(No, you don't really care about this.)_
 
 When copying formatted text from Google Docs, Google Docs need to insert some formatting CSS (i.e., the `style` tag) to the copied text to preserve the format. 
 Among those CSS properties, one is `white-space: pre-wrap;`, which is to preserve sequences of white space and to interpret newline characters as line breaks ([ref](https://developer.mozilla.org/en-US/docs/Web/CSS/white-space)). 
-While this setting is useful in some cases, it becomes problematic when used in emails, because some email clients may insert some newline characters in the HTML message when rendering the message. 
+While this setting is useful in some cases, it becomes problematic when used in emails, because some email servers/clients may insert some newline characters in the HTML message when transmitting/rendering the message. 
 Usually these newline characters should have no effect in HTML (they are just treated as regular space), but with the `white-space: pre-wrap;` CSS property, they become actual line break! 
 That's why the formatting issue manifests as additional, unexpected line breaks. 
-The "Remove white-space preservation" option in tool removes any occurance of `white-space: pre-*;` in the copied content to fix this issue. 
+
+I should note that this issue is not really about Google Docs but about the interplay between email services and HTML, which is a mess to say the least. In practice, the simple fix is to just removes any occurance of `white-space: pre-*;`, which is exactly what the "Remove white-space preservation" option in this tool does. 
