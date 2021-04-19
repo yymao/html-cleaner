@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="author" content="Yao-Yuan Mao">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTML Cleaner</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"
+    integrity="sha256-l85OmPOjvil/SOvVt3HnSSjzF1TUMyT9eV0c2BzEGzU=" crossorigin="anonymous" />
+  <style>
+    body {
+      padding: 20px;
+      padding-bottom: 80px;
+      font-family: sans-serif;
+    }
+
+    #page {
+      margin: 0px auto;
+      max-width: 960px;
+    }
+
+    #content {
+      border-width: 3px;
+      border-style: dashed;
+      height: 40vh;
+      margin: 10px 0;
+      overflow: auto;
+      padding: 6px 10px;
+      resize: both;
+    }
+
+    button {
+      margin: 5px 10px 5px 0;
+      padding: 12px 10px;
+    }
+
+    #hint {
+      color: forestgreen;
+      font-weight: bold;
+      opacity: 0%;
+    }
+
+    @keyframes flash-show {
+      from {
+        opacity: 100%;
+      }
+
+      to {
+        opacity: 0%;
+      }
+    }
+
+    @keyframes flash-green {
+      from {
+        border-color: forestgreen;
+      }
+
+      to {
+        border-color: #000;
+      }
+    }
+
+    #content.run {
+      animation: flash-green 2s ease-in;
+    }
+
+    #hint.run {
+      animation: flash-show 2s ease-in;
+    }
+
+    .footnote {
+      font-size: 80%;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="page">
+    <h1>HTML Cleaner</h1>
+    <p>Copy and paste your formatted content in the box below.</p>
+    <div contenteditable="true" id="content"></div>
+    <button id="remove-white-space-pre"
+      title="Sequences of white space and newline characters are collapsed. Preserve all other formatting. Useful when copying formatted Google Docs contents to email client.">Remove
+      white-space preservation</button>
+    <button id="remove-all-style" title="Remove all 'style' tags so that only schematic formatting remains.">Remove all
+      non-schematic formatting</button>
+    <span id="hint">Cleaned & copied!</span>
+    <p>Click one of the buttons above; your text will cleaned and automatically re-copied. You can then paste it to your destination.
+      If you notice that additional formatting is needed after cleaning, use your destination editor to do so.</p>
+    <p class="footnote">All operations are done locally on the client side. No data is transmitted to the server or a
+      third party.</p>
+    <p class="footnote"><a href="https://github.com/yymao/html-cleaner#html-cleaner">Learn more</a>.
+      <a href="https://github.com/yymao/html-cleaner"><img style="vertical-align: middle;"
+          src="https://img.shields.io/github/license/yymao/html-cleaner"></a> &#9400; 2019-2021
+      <a href="https://yymao.github.io/">Yao-Yuan Mao</a>
+    </p>
+  </div>
+
+  <script
+  src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
+  integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI="
+  crossorigin="anonymous"></script>
+  <script>
+    function hide_hint() {
+      $("#hint,#content").removeClass();
+      void document.getElementById("hint").offsetWidth;
+      void document.getElementById("content").offsetWidth;
+    }
+
+    function show_hint() {
+      $("#hint,#content").addClass("run");
+    }
+
+    function copy_content() {
+      document.getElementById("content").focus()
+      document.execCommand("selectAll");
+      document.execCommand("copy");
+    }
+
+    $("#remove-white-space-pre").click(function () {
+      hide_hint();
+      if ($("#content").html()) {
+        $("#content *").attr("style", function (index, attr) {
+          if (attr) return attr.replace(/\bwhite-space\s*:\s*pre(?:-wrap|-line)?;?/ig, "");
+        });
+        $("#content *").removeAttr("class");
+        copy_content();
+        show_hint();
+      }
+    });
+
+    $("#remove-all-style").click(function () {
+      hide_hint();
+      if ($("#content").html()) {
+        $("#content *").removeAttr("style class width height");
+        copy_content();
+        show_hint();
+      }
+    });
+  </script>
+
+</body>
+
+</html>
