@@ -62,11 +62,11 @@
     }
 
     #content.run {
-      animation: flash-green 1.5s ease-in;
+      animation: flash-green 4s ease-in;
     }
 
     #hint.run {
-      animation: flash-show 1.5s ease-in;
+      animation: flash-show 4s ease-in;
     }
 
     .footnote {
@@ -85,20 +85,23 @@
       white-space preservation</button>
     <button id="remove-all-style" title="Remove all 'style' tags so that only schematic formatting remains.">Remove all
       non-schematic formatting</button>
-    <span id="hint">Cleaned!</span>
-    <p>Once it's cleaned, re-select and copy the content above, and paste it to your destination. If you
-      notice that additional formatting is needed after cleaning, use your destination editor to do so.</p>
+    <span id="hint">Cleaned & copied!</span>
+    <p>Click one of the buttons above; your text will be cleaned and automatically re-copied.
+      You can then paste it to your destination.
+      If you notice that additional formatting is needed after cleaning, use your destination editor to do so.</p>
     <p class="footnote">All operations are done locally on the client side. No data is transmitted to the server or a
       third party.</p>
     <p class="footnote"><a href="https://github.com/yymao/html-cleaner#html-cleaner">Learn more</a>.
       <a href="https://github.com/yymao/html-cleaner"><img style="vertical-align: middle;"
-          src="https://img.shields.io/github/license/yymao/html-cleaner"></a> &#9400; 2019
+          src="https://img.shields.io/github/license/yymao/html-cleaner"></a> &#9400; 2019-2021
       <a href="https://yymao.github.io/">Yao-Yuan Mao</a>
     </p>
   </div>
 
-  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-    integrity="sha256-pasqAKBDmFT4eHoN2ndd6lN370kFiGUFyTiUHWhU7k8=" crossorigin="anonymous"></script>
+  <script
+  src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
+  integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI="
+  crossorigin="anonymous"></script>
   <script>
     function hide_hint() {
       $("#hint,#content").removeClass();
@@ -106,7 +109,11 @@
       void document.getElementById("content").offsetWidth;
     }
 
-    function show_hint() {
+    function copy_content_and_show_hint() {
+      var success;
+      document.getElementById("content").focus()
+      success = document.execCommand("selectAll") && document.execCommand("copy");
+      $("#content").html(success ? "Cleaned & copied!" : "Cleaned. But please re-copy manually!");
       $("#hint,#content").addClass("run");
     }
 
@@ -116,8 +123,8 @@
         $("#content *").attr("style", function (index, attr) {
           if (attr) return attr.replace(/\bwhite-space\s*:\s*pre(?:-wrap|-line)?;?/ig, "");
         });
-        $("#content *").removeAttr("class")
-        show_hint();
+        $("#content *").removeAttr("class");
+        copy_content_and_show_hint();
       }
     });
 
@@ -125,7 +132,7 @@
       hide_hint();
       if ($("#content").html()) {
         $("#content *").removeAttr("style class width height");
-        show_hint();
+        copy_content_and_show_hint();
       }
     });
   </script>
