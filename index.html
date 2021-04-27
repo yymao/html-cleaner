@@ -113,7 +113,7 @@
       var success;
       document.getElementById("content").focus()
       success = document.execCommand("selectAll") && document.execCommand("copy");
-      $("#content").html(success ? "Cleaned & copied!" : "Cleaned. But please re-copy manually!");
+      $("#hint").html(success ? "Cleaned & copied!" : "Cleaned. But please re-copy manually!");
       $("#hint,#content").addClass("run");
     }
 
