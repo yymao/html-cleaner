@@ -2,24 +2,25 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="author" content="Yao-Yuan Mao">
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Yao-Yuan Mao">
+  <meta name="description" content="A web app that fixes an annoying line breaking issue that appears when you draft emails in Google Docs and then copy and paste the content into your email client.">
   <title>HTML Cleaner</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"
-    integrity="sha256-l85OmPOjvil/SOvVt3HnSSjzF1TUMyT9eV0c2BzEGzU=" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/1.1.0/modern-normalize.min.css" integrity="sha512-wpPYUAdjBVSE4KJnH1VR1HeZfpl1ub8YT/NKx4PuQ5NmX2tKuGu6U/JRp5y+Y8XG2tV+wKQpNHVUX03MfMFn9Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/2.0.6/buttons.min.css" integrity="sha512-6fgfhyE9ySgHhLG/VlUzsLMAl5ASlf77G0KyTajPvyYXyMItY3h98gEX1Pnzjo3P2QjDQW4S95CX05ycHeiffQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
     body {
       padding: 20px;
       padding-bottom: 80px;
-      font-family: sans-serif;
     }
-
+    a, a:hover, a:visited, a:active {
+      color: #0078e7;
+    }
     #page {
       margin: 0px auto;
       max-width: 960px;
     }
-
     #content {
       border-width: 3px;
       border-style: dashed;
@@ -29,46 +30,34 @@
       padding: 6px 10px;
       resize: both;
     }
-
-    button {
-      margin: 5px 10px 5px 0;
-      padding: 12px 10px;
-    }
-
     #hint {
       color: forestgreen;
       font-weight: bold;
       opacity: 0%;
+      margin-left: 1em;
     }
-
     @keyframes flash-show {
       from {
         opacity: 100%;
       }
-
       to {
         opacity: 0%;
       }
     }
-
     @keyframes flash-green {
       from {
         border-color: forestgreen;
       }
-
       to {
         border-color: #000;
       }
     }
-
     #content.run {
       animation: flash-green 4s ease-in;
     }
-
     #hint.run {
       animation: flash-show 4s ease-in;
     }
-
     .footnote {
       font-size: 80%;
     }
@@ -78,12 +67,12 @@
 <body>
   <div id="page">
     <h1>HTML Cleaner</h1>
-    <p>Copy and paste your formatted content in the box below.</p>
+    <p>Copy and paste your formatted content (e.g., from Google Docs) in the box below.</p>
     <div contenteditable="true" id="content"></div>
-    <button id="remove-white-space-pre"
-      title="Sequences of white space and newline characters are collapsed. Preserve all other formatting. Useful when copying formatted Google Docs contents to email client.">Remove
-      white-space preservation</button>
-    <button id="remove-all-style" title="Remove all 'style' tags so that only schematic formatting remains.">Remove all
+    <button id="remove-white-space-pre" class="pure-button pure-button-primary"
+      title="Sequences of white space and newline characters are collapsed. Preserve all other formatting. Useful when copying formatted Google Docs contents to email client.">Fix Google Docs! [Remove
+      white-space preservation]</button>
+    <button id="remove-all-style" class="pure-button" title="Remove all 'style' tags so that only schematic formatting remains.">Remove all
       non-schematic formatting</button>
     <span id="hint">Cleaned & copied!</span>
     <p>Click one of the buttons above; your text will be cleaned and automatically re-copied.
@@ -91,52 +80,51 @@
       If you notice that additional formatting is needed after cleaning, use your destination editor to do so.</p>
     <p class="footnote">All operations are done locally on the client side. No data is transmitted to the server or a
       third party.</p>
-    <p class="footnote"><a href="https://github.com/yymao/html-cleaner#html-cleaner">Learn more</a>.
+    <p class="footnote"><a href="https://github.com/yymao/html-cleaner#html-cleaner">Learn more</a> |
       <a href="https://github.com/yymao/html-cleaner"><img style="vertical-align: middle;"
           src="https://img.shields.io/github/license/yymao/html-cleaner"></a> &#9400; 2019-2021
       <a href="https://yymao.github.io/">Yao-Yuan Mao</a>
     </p>
   </div>
 
-  <script
-  src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
-  integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI="
-  crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cash/8.1.0/cash.min.js" integrity="sha512-sgDgZX/GgfD7qSeMjPN/oE9EQgXZJW55FIjdexVT60QerG2gAWhR9QDQEGt3O90Dy9jVcwMWsoTMhLgldIiKXw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script>
     function hide_hint() {
-      $("#hint,#content").removeClass();
+      $("#hint, #content").removeClass();
       void document.getElementById("hint").offsetWidth;
       void document.getElementById("content").offsetWidth;
     }
 
     function copy_content_and_show_hint() {
-      var success;
-      document.getElementById("content").focus()
-      success = document.execCommand("selectAll") && document.execCommand("copy");
+      document.getElementById("content").focus();
+      var success = document.execCommand("selectAll") && document.execCommand("copy");
       $("#hint").html(success ? "Cleaned & copied!" : "Cleaned. But please re-copy manually!");
-      $("#hint,#content").addClass("run");
+      $("#hint, #content").addClass("run");
     }
 
-    $("#remove-white-space-pre").click(function () {
+    $("#remove-white-space-pre").on("click", () => {
       hide_hint();
       if ($("#content").html()) {
-        $("#content *").attr("style", function (index, attr) {
-          if (attr) return attr.replace(/\bwhite-space\s*:\s*pre(?:-wrap|-line)?;?/ig, "");
+        var contents = $("#content *");
+        contents.each((i, elem) => {
+          var e = $(elem);
+          var s = e.attr("style");
+          if(s) e.attr("style", s.replace(/\bwhite-space\s*:\s*pre(?:-wrap|-line)?;?/ig, "").trim());
         });
-        $("#content *").removeAttr("class");
+        contents.removeAttr("class");
         copy_content_and_show_hint();
       }
     });
 
-    $("#remove-all-style").click(function () {
+    $("#remove-all-style").on("click", () => {
       hide_hint();
       if ($("#content").html()) {
-        $("#content *").removeAttr("style class width height");
+        var contents = $("#content *");
+        contents.removeAttr("class width height");
+        contents.not("b, i, em").removeAttr("style");
         copy_content_and_show_hint();
       }
     });
   </script>
-
 </body>
-
 </html>
