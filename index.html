@@ -109,7 +109,7 @@
         contents.each((i, elem) => {
           var e = $(elem);
           var s = e.attr("style");
-          if(s) e.attr("style", s.replace(/\bwhite-space\s*:\s*[nowraprelibksc-]+\b\s*;?/ig, "").trim());
+          if(s) e.attr("style", s.replace(/\bwhite-space\s*:\s*[nowrapelibksc-]+\b\s*;?/ig, "").trim());
         });
         contents.removeAttr("class");
         copy_content_and_show_hint();
