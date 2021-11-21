@@ -109,7 +109,7 @@
         contents.each((i, elem) => {
           var e = $(elem);
           var s = e.attr("style");
-          if(s) e.attr("style", s.replace(/\bwhite-space\s*:\s*pre(?:-wrap|-line)?;?/ig, "").trim());
+          if(s) e.attr("style", s.replace(/\bwhite-space\s*:\s*[nowraprelibksc-]+\b\s*;?/ig, "").trim());
         });
         contents.removeAttr("class");
         copy_content_and_show_hint();
@@ -121,7 +121,7 @@
       if ($("#content").html()) {
         var contents = $("#content *");
         contents.removeAttr("class width height");
-        contents.not("b, i, em").removeAttr("style");
+        contents.not("b, i, u, em").removeAttr("style");
         copy_content_and_show_hint();
       }
     });
